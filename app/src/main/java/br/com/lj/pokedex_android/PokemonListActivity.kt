@@ -15,7 +15,7 @@ import br.com.lj.pokedex_android.view.PokemonAdapter
 import br.com.lj.pokedex_android.viewModel.PokemonViewModel
 import br.com.lj.pokedex_android.viewModel.PokemonViewModelFactory
 
-class MainActivity : AppCompatActivity() {
+class PokemonListActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
 
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             loadRecyclerView(it)
         })
     }
+
     private fun loadRecyclerView(pokemons: List<Pokemon?>) {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = PokemonAdapter(pokemons)
