@@ -69,10 +69,10 @@
                 android:id="@+id/tv_type_1"
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:background="#fd7d24"
+                android:background="#a4acaf"
                 android:gravity="center_horizontal"
                 android:textAlignment="center"
-                android:textColor="#ffffff"
+                android:textColor="#212121"
                 android:textSize="12sp"
                 tools:text="Fire" />
 
@@ -82,10 +82,10 @@
                 android:layout_marginLeft="10dp"
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:background="#fd7d24"
+                android:background="#a4acaf"
                 android:gravity="center_horizontal"
                 android:textAlignment="center"
-                android:textColor="#ffffff"
+                android:textColor="#212121"
                 android:textSize="12sp"
                 tools:text="Fire" />
         </LinearLayout>

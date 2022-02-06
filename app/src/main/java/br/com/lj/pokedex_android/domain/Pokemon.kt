@@ -6,6 +6,9 @@ data class Pokemon(
     val types : List<PokemonType>
 ){
     val formatterNumber = number.toString().padStart(3, '0')
+    val formatterName = name.capitalize()
+
+
     val imageUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/$formatterNumber.png"
 }
 
