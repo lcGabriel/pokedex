@@ -19,7 +19,10 @@ class PokemonListActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var recyclerView: RecyclerView
-    private  var listPokemon: List<Pokemon>? = null
+    private var isLoading = false
+    private var totalPage = 1
+    private var page = 1
+
 
     private val viewModel by lazy {
         ViewModelProvider(this, PokemonViewModelFactory())
