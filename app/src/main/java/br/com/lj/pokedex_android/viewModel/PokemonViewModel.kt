@@ -1,5 +1,7 @@
 package br.com.lj.pokedex_android.viewModel
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.lj.pokedex_android.api.PokemonRepository
