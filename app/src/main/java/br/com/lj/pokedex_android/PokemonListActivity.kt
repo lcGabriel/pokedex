@@ -110,7 +110,7 @@ class PokemonListActivity : AppCompatActivity() {
                 if (!isLoading) {
                     if ((visibleItemCount + pastVisibleItem) >= total!!) {
                         page++
-                        getPage(listPokemon!!.toList())
+                        getPage(viewModel.pokemons.value!!.toList())
                     }
 
                 }
