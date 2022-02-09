@@ -1,7 +1,6 @@
 package br.com.lj.pokedex_android
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,19 +13,17 @@ import br.com.lj.pokedex_android.view.PokemonAdapter
 import br.com.lj.pokedex_android.viewModel.PokemonViewModel
 import br.com.lj.pokedex_android.viewModel.PokemonViewModelFactory
 import java.util.*
+import kotlin.math.ceil
 
 class PokemonListActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var recyclerView: RecyclerView
     private var isLoading = false
-    private var totalPage = 1
     private var page = 1
     private var lastPage: Boolean = false
-    private var loading: Boolean = false
     private var initializeStateBottom: Boolean = false
-    private var paginationPerPhase: Boolean = true
-    private var isPlural: Boolean = false
+    private var listPokemon: ArrayList<Pokemon>? = arrayListOf()
     private var currentPage: Int = 1
     private var limit: Int = 10
 
@@ -49,36 +46,40 @@ class PokemonListActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         viewModel.pokemons.observe(this) {
-            loadRecyclerView(it)
             searchPokemons(it)
+            getPage(it)
         }
+        observeRecycler()
+    }
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
-                    val visibleItemCount = layoutManager.childCount
-                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
-                    val total = recyclerView.adapter?.itemCount
+    fun getPage(pokemons: List<Pokemon?>){
+        isLoading = true
+        binding.progressBar.visibility = View.VISIBLE
+        var item = 0
 
-                    if(!isLoading){
-                        if((visibleItemCount + pastVisibleItem) >= total!!){
-                            page++
-                            getPage()
-                        }
+        /* Pagination */
+        val totalPages = ceil(pokemons.size / limit.toDouble()).toInt()
 
+        if (currentPage < totalPages) {
+            binding.progressBar.visibility = View.VISIBLE
+            initializeStateBottom = true
+
+            for (i in pokemons) {
+                if(i != null){
+                    if (item == totalPages) {
+                        binding.progressBar.visibility = View.GONE
+                        loadRecyclerView(listPokemon!!.toList())
+                        isLoading = false
+                        return
+                    }else{
+                        item++
+                        listPokemon?.add(i)
                     }
                 }
             }
-        })
-    }
-
-    fun getPage(){
-        isLoading = true
-        binding.progressBar.visibility = View.VISIBLE
-        val start = (page - 1) * limit
-        val end =  (page) * limit
-
-        for(i in start..end){
+        } else {
+            binding.progressBar.visibility = View.GONE
+            lastPage = true
         }
     }
 
@@ -99,12 +100,24 @@ class PokemonListActivity : AppCompatActivity() {
         })
     }
 
-    fun getPokemons(isOnRefresh: Boolean){
+    private fun observeRecycler() {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val visibleItemCount = layoutManager.childCount
+                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+                val total = recyclerView.adapter?.itemCount
 
+                if (!isLoading) {
+                    if ((visibleItemCount + pastVisibleItem) >= total!!) {
+                        page++
+                        getPage(listPokemon!!)
+                    }
 
-
+                }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
     }
-
 
     private fun loadRecyclerView(pokemons: List<Pokemon?>) {
         recyclerView.adapter = PokemonAdapter(pokemons)
