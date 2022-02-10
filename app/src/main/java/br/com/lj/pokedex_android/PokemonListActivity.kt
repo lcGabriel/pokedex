@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +28,7 @@ class PokemonListActivity : AppCompatActivity() {
     private var listPokemonName: ArrayList<String>? = arrayListOf()
     private var currentPage: Int = 0
     private var limit: Int = 10
-    private var start: Int = 0
+    private var isFilter = false
 
     lateinit var layoutManager: LinearLayoutManager
 
@@ -63,13 +64,17 @@ class PokemonListActivity : AppCompatActivity() {
                 val total = recyclerView.adapter?.itemCount
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
-                binding.progressBar.visibility = View.VISIBLE
-                Handler(Looper.getMainLooper()).postDelayed({
-                    if (isScrolling && (total == lastVisibleItemPosition + 1)) {
-                        isScrolling = false
-                        makeListPokemon(listPokemonInsert)
+                if(!isFilter) {
+                    binding.progressBar.visibility = View.VISIBLE
+                    if (total == lastVisibleItemPosition + 1 && newState == SCROLL_STATE_IDLE) {
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (isScrolling && (total == lastVisibleItemPosition + 1)) {
+                                isScrolling = false
+                                makeListPokemon(listPokemonInsert)
+                            }
+                        }, 8000L)
                     }
-                }, 8000L)
+                }
 
                 isScrolling = true
             }
@@ -84,7 +89,10 @@ class PokemonListActivity : AppCompatActivity() {
 
     private fun searchPokemons(pokemons: List<Pokemon?>) {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = false
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                isFilter = false
+                return false
+            }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 val filteredContacts =
@@ -94,6 +102,7 @@ class PokemonListActivity : AppCompatActivity() {
                         )
                     }
 
+                isFilter = true
                 recyclerView.adapter = PokemonAdapter(filteredContacts)
 
                 return false

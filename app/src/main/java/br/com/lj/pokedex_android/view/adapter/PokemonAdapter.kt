@@ -1,5 +1,6 @@
 package br.com.lj.pokedex_android.view.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.lj.pokedex_android.R
 import br.com.lj.pokedex_android.domain.Pokemon
+import br.com.lj.pokedex_android.utils.CommonUtlis
 import com.bumptech.glide.Glide
 
 class PokemonAdapter(
@@ -43,11 +45,16 @@ class PokemonAdapter(
                 tvNumber.text = "N° ${item.formatterNumber}"
                 tvName.text = item.formatterName
                 tvType1.text = item.types[0].name.capitalize()
-
+                tvType1.setBackgroundColor(Color.parseColor(CommonUtlis.CommonUtils.changeColorTypePoKemon(
+                    item.types[0].name
+                )))
 
                 if (item.types.size > 1) {
                     tvType2.visibility = View.VISIBLE
                     tvType2.text = item.types[1].name.capitalize()
+                    tvType2.setBackgroundColor(Color.parseColor(CommonUtlis.CommonUtils.changeColorTypePoKemon(
+                        item.types[1].name
+                    )))
                 } else {
                     tvType2.visibility = View.GONE
                 }
