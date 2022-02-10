@@ -1,6 +1,8 @@
 package br.com.lj.pokedex_android
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,23 +11,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.lj.pokedex_android.databinding.ActivityMainBinding
 import br.com.lj.pokedex_android.domain.Pokemon
-import br.com.lj.pokedex_android.view.PokemonAdapter
+import br.com.lj.pokedex_android.view.adapter.PokemonAdapter
 import br.com.lj.pokedex_android.viewModel.PokemonViewModel
 import br.com.lj.pokedex_android.viewModel.PokemonViewModelFactory
 import java.util.*
-import kotlin.math.ceil
 
 class PokemonListActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var recyclerView: RecyclerView
-    private var isLoading = false
-    private var page = 1
-    private var lastPage: Boolean = false
-    private var initializeStateBottom: Boolean = false
-    private var listPokemon: ArrayList<Pokemon>? = arrayListOf()
-    private var currentPage: Int = 1
+    private var isScrolling = false
+    private var isReload = false
+    private var listPokemonInsert = ArrayList<Pokemon>()
+    private var listPokemon: ArrayList<Pokemon?>? = arrayListOf()
+    private var listPokemonName: ArrayList<String>? = arrayListOf()
+    private var currentPage: Int = 0
     private var limit: Int = 10
+    private var start: Int = 0
 
     lateinit var layoutManager: LinearLayoutManager
 
@@ -47,40 +49,37 @@ class PokemonListActivity : AppCompatActivity() {
 
         viewModel.pokemons.observe(this) {
             searchPokemons(it)
-            getPage(it)
+            makeListPokemon(it)
+            addListPokemonFull(it)
         }
-        observeRecycler()
+
+        buildRecyclerView()
     }
 
-    fun getPage(pokemons: List<Pokemon?>){
-        isLoading = true
-        binding.progressBar.visibility = View.VISIBLE
-        var item = 0
+    private fun buildRecyclerView() {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val total = recyclerView.adapter?.itemCount
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
-        /* Pagination */
-        val totalPages = ceil(pokemons.size / limit.toDouble()).toInt()
-
-        if (currentPage < totalPages) {
-            binding.progressBar.visibility = View.VISIBLE
-            initializeStateBottom = true
-
-            for (i in pokemons) {
-                if(i != null){
-                    if (item == totalPages) {
-                        binding.progressBar.visibility = View.GONE
-                        loadRecyclerView(listPokemon!!.toList())
-                        isLoading = false
-                        return
-                    }else{
-                        item++
-                        listPokemon?.add(i)
+                binding.progressBar.visibility = View.VISIBLE
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (isScrolling && (total == lastVisibleItemPosition + 1)) {
+                        isScrolling = false
+                        makeListPokemon(listPokemonInsert)
                     }
-                }
+                }, 8000L)
+
+                isScrolling = true
             }
-        } else {
-            binding.progressBar.visibility = View.GONE
-            lastPage = true
-        }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                binding.progressBar.visibility = View.GONE
+                isScrolling = false
+            }
+        })
     }
 
     private fun searchPokemons(pokemons: List<Pokemon?>) {
@@ -89,9 +88,11 @@ class PokemonListActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 val filteredContacts =
-                    pokemons.filter { newText!!.uppercase(Locale.getDefault()) in it!!.name.uppercase(
-                        Locale.getDefault()
-                    ) }
+                    pokemons.filter {
+                        newText!!.uppercase(Locale.getDefault()) in it!!.name.uppercase(
+                            Locale.getDefault()
+                        )
+                    }
 
                 recyclerView.adapter = PokemonAdapter(filteredContacts)
 
@@ -100,26 +101,51 @@ class PokemonListActivity : AppCompatActivity() {
         })
     }
 
-    private fun observeRecycler() {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val visibleItemCount = layoutManager.childCount
-                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
-                val total = recyclerView.adapter?.itemCount
-
-                if (!isLoading) {
-                    if ((visibleItemCount + pastVisibleItem) >= total!!) {
-                        page++
-                        getPage(viewModel.pokemons.value!!.toList())
+    private fun makeListPokemon(pokemons: List<Pokemon?>) {
+        for (poke in pokemons) {
+            if (isReload) {
+                if (viewModel.checkPokemonName(listPokemonName!!.toList(), poke!!)) {
+                    when (currentPage) {
+                        limit -> {
+                            loadRecyclerView(viewModel.reloadList(limit ,viewModel.listNamePokemon))
+                            break
+                        }
+                        else -> {
+                            viewModel.listNamePokemon.add(poke.name)
+                            listPokemon?.add(poke)
+                            currentPage++
+                        }
                     }
-
                 }
-                super.onScrolled(recyclerView, dx, dy)
+            } else {
+                when (currentPage) {
+                    limit -> {
+                        loadRecyclerView(listPokemon!!)
+                        binding.progressBar.visibility = View.GONE
+                        isReload = true
+                        break
+                    }
+                    else -> {
+                        listPokemonName?.add(poke!!.name)
+                        listPokemon?.add(poke)
+                        currentPage++
+                    }
+                }
+
             }
-        })
+        }
+    }
+
+    private fun addListPokemonFull(pokemons: List<Pokemon?>) {
+        for (poke in pokemons) {
+            if (poke != null) {
+                listPokemonInsert.add(poke)
+            }
+        }
     }
 
     private fun loadRecyclerView(pokemons: List<Pokemon?>) {
         recyclerView.adapter = PokemonAdapter(pokemons)
+        currentPage - 10
     }
 }

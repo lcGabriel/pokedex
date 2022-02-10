@@ -1,12 +1,7 @@
 package br.com.lj.pokedex_android.api
 
-import android.util.Log
 import br.com.lj.pokedex_android.api.model.PokemonApiResult
 import br.com.lj.pokedex_android.api.model.PokemonsApiResult
-import br.com.lj.pokedex_android.domain.Pokemon
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

@@ -1,4 +1,4 @@
-package br.com.lj.pokedex_android.view
+package br.com.lj.pokedex_android.view.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.lj.pokedex_android.R
 import br.com.lj.pokedex_android.domain.Pokemon
 import com.bumptech.glide.Glide
-import java.util.*
 
 class PokemonAdapter(
     private val items: List<Pokemon?>
@@ -44,6 +43,7 @@ class PokemonAdapter(
                 tvNumber.text = "N° ${item.formatterNumber}"
                 tvName.text = item.formatterName
                 tvType1.text = item.types[0].name.capitalize()
+
 
                 if (item.types.size > 1) {
                     tvType2.visibility = View.VISIBLE
