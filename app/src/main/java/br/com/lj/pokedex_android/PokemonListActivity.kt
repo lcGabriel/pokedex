@@ -29,6 +29,7 @@ class PokemonListActivity : AppCompatActivity() {
     private var currentPage: Int = 0
     private var limit: Int = 10
     private var isFilter = false
+    private var activity: PokemonListActivity? = null
 
     lateinit var layoutManager: LinearLayoutManager
 
@@ -103,7 +104,7 @@ class PokemonListActivity : AppCompatActivity() {
                     }
 
                 isFilter = true
-                recyclerView.adapter = PokemonAdapter(filteredContacts)
+                recyclerView.adapter = PokemonAdapter(filteredContacts, activity!!)
 
                 return false
             }
@@ -154,7 +155,8 @@ class PokemonListActivity : AppCompatActivity() {
     }
 
     private fun loadRecyclerView(pokemons: List<Pokemon?>) {
-        recyclerView.adapter = PokemonAdapter(pokemons)
+        recyclerView.adapter = PokemonAdapter(pokemons, this)
+        activity = this
         currentPage - 10
     }
 }
