@@ -34,7 +34,7 @@ class PokemonInfoActivity : AppCompatActivity() {
     }
 
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun initValues() {
         val i = intent
         val urlImage = i.getStringExtra("image")
@@ -42,29 +42,45 @@ class PokemonInfoActivity : AppCompatActivity() {
         val numberPokemon = i.getStringExtra("number")
         val type1 = i.getStringExtra("type1")
         val type2 = i.getStringExtra("type2")
+        val listSkills = i.getStringArrayListExtra("ability")
+        val height = i.getDoubleExtra("height", 0.0)
+        val weight = i.getDoubleExtra("weight",0.0)
+        val stats = i.getIntegerArrayListExtra("statsList")
+
 
         Glide.with(this).load(urlImage).into(binding.ivPokemon)
         binding.tvName.text = namePokemon
         binding.tvNumber.text = numberPokemon
         binding.tvType1.text = type1
+        binding.txvHeightPokemon.text = height.toString().plus("m")
+        binding.txvWeigthPokemon.text = weight.toString().plus("Kg")
+        binding.txvSkillsPokemon.text = listSkills!![0].capitalize()
+        binding.customItem.txvHpPokemon.text = stats!![0].toString().plus(" %")
+        binding.customItem.txvAttackPokemon.text = stats[1].toString().plus(" %")
+        binding.customItem.txvDefencePokemon.text = stats[2].toString().plus(" %")
+        binding.customItem.txvSpecialAttackPokemon.text = stats[3].toString().plus(" %")
+        binding.customItem.txvSpeedPokemon.text = stats[4].toString().plus(" %")
+        binding.customItem.txvSpecialDefencePokemon.text = stats[5].toString().plus(" %")
+        binding.customItem.txvTotalPokemon.text = (stats[0]+stats[1]+stats[2]+stats[3]+stats[4]).toString().plus(" %")
+
 
         binding.tvType1.setBackgroundColor(
             Color.parseColor(
                 CommonUtlis.CommonUtils.changeColorTypePoKemon(
-                    type1!!
+                    type1!!.decapitalize()
                 )
             )
         )
 
         binding.tvType2.visibility = View.GONE
         if (!type2.isNullOrEmpty()) {
-            binding.tvType2.text = type1
+            binding.tvType2.text = type2
             binding.tvType2.visibility = View.VISIBLE
 
-            binding.tvType1.setBackgroundColor(
+            binding.tvType2.setBackgroundColor(
                 Color.parseColor(
                     CommonUtlis.CommonUtils.changeColorTypePoKemon(
-                        type2
+                        type2.decapitalize()
                     )
                 )
             )

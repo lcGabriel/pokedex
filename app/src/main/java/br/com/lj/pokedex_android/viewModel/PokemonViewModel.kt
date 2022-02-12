@@ -29,8 +29,19 @@ class PokemonViewModel : ViewModel() {
 
                 pokemonApiResult?.let {
                     Pokemon(
+                        pokemonApiResult.height,
                         pokemonApiResult.id,
                         pokemonApiResult.name,
+                        pokemonApiResult.weight,
+                        pokemonApiResult.abilities.map { abilities ->
+                            abilities.ability
+                        },
+                        pokemonApiResult.stats.map { status ->
+                            Pokemon.Stats(
+                                status.base_stat,
+                                status.stat
+                            )
+                        },
                         pokemonApiResult.types.map { type ->
                             type.type
                         }

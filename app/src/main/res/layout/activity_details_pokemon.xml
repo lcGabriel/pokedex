@@ -224,7 +224,7 @@
                 android:textColor="#919191"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/txv_category_pokemon"
+                app:layout_constraintStart_toEndOf="@+id/txv_weigth_pokemon"
                 app:layout_constraintTop_toBottomOf="@+id/txv_height"
                 tools:text="M/F" />
 

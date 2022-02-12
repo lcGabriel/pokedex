@@ -44,6 +44,8 @@ class PokemonAdapter(
             val tvName = findViewById<TextView>(R.id.tv_name)
             val tvType1 = findViewById<TextView>(R.id.tv_type_1)
             val tvType2 = findViewById<TextView>(R.id.tv_type_2)
+            val ablt = ArrayList<String>()
+            val statsList = ArrayList<Int>()
             val card = findViewById<ConstraintLayout>(R.id.card_click)
 
             item?.let {
@@ -66,13 +68,25 @@ class PokemonAdapter(
                     tvType2.visibility = View.GONE
                 }
 
+                for(ability in item.abilities){
+                    ablt.add(ability.name)
+                }
+
+                for(stats in item.stats){
+                    statsList.add(stats.base_stat)
+                }
+
                 card.setOnClickListener {
                     Intent(activity, PokemonInfoActivity::class.java).apply {
                         putExtra("name", tvName.text)
                         putExtra("number",tvNumber.text)
                         putExtra("image", item.imageUrl)
-                        putExtra("type1", item.types[0].name)
-                        putExtra("type2", item.types[1].name)
+                        putExtra("type1", tvType1.text)
+                        putExtra("type2", tvType2.text)
+                        putExtra("weight", item.weight.toDouble())
+                        putExtra("height", item.height.toDouble())
+                        putExtra("ability", ablt)
+                        putExtra("statsList", statsList)
 
                         activity.startActivity(this)
                     }
