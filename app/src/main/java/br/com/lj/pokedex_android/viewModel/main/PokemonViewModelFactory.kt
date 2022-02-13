@@ -1,4 +1,4 @@
-package br.com.lj.pokedex_android.viewModel
+package br.com.lj.pokedex_android.viewModel.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

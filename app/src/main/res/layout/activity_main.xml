@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".PokemonListActivity">
+    tools:context=".view.main.PokemonListActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

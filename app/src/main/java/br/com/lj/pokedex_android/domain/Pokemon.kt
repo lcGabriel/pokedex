@@ -13,8 +13,7 @@ data class Pokemon(
     val formatterName = name.capitalize()
 
     class Stats(
-        val base_stat: Int,
-        val stat: StatsPokemon
+        val base_stat: Int
     )
 
     val imageUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/$formatterNumber.png"

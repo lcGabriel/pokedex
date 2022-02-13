@@ -1,9 +1,9 @@
-package br.com.lj.pokedex_android.viewModel
+package br.com.lj.pokedex_android.viewModel.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.lj.pokedex_android.api.PokemonRepository
-import br.com.lj.pokedex_android.domain.Pokemon
+import br.com.lj.pokedex_android.domain.*
 
 class PokemonViewModel : ViewModel() {
     var pokemons = MutableLiveData<List<Pokemon?>>()
@@ -38,8 +38,7 @@ class PokemonViewModel : ViewModel() {
                         },
                         pokemonApiResult.stats.map { status ->
                             Pokemon.Stats(
-                                status.base_stat,
-                                status.stat
+                                status.base_stat
                             )
                         },
                         pokemonApiResult.types.map { type ->

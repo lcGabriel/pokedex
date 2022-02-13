@@ -1,4 +1,4 @@
-package br.com.lj.pokedex_android
+package br.com.lj.pokedex_android.view.main
 
 import android.os.Bundle
 import android.os.Handler
@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.lj.pokedex_android.databinding.ActivityMainBinding
 import br.com.lj.pokedex_android.domain.Pokemon
-import br.com.lj.pokedex_android.view.adapter.PokemonAdapter
-import br.com.lj.pokedex_android.viewModel.PokemonViewModel
-import br.com.lj.pokedex_android.viewModel.PokemonViewModelFactory
+import br.com.lj.pokedex_android.view.main.adapter.PokemonAdapter
+import br.com.lj.pokedex_android.viewModel.main.PokemonViewModel
+import br.com.lj.pokedex_android.viewModel.main.PokemonViewModelFactory
 import java.util.*
 
 class PokemonListActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package br.com.lj.pokedex_android.view.adapter
+package br.com.lj.pokedex_android.view.main.adapter
 
 import android.content.Intent
 import android.graphics.Color
@@ -9,16 +9,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import br.com.lj.pokedex_android.PokemonListActivity
 import br.com.lj.pokedex_android.R
 import br.com.lj.pokedex_android.domain.Pokemon
 import br.com.lj.pokedex_android.utils.CommonUtlis
-import br.com.lj.pokedex_android.view.activity.PokemonInfoActivity
+import br.com.lj.pokedex_android.view.details.PokemonInfoActivity
+import br.com.lj.pokedex_android.view.main.PokemonListActivity
 import com.bumptech.glide.Glide
 
 class PokemonAdapter(
     private val items: List<Pokemon?>,
-    val activity: PokemonListActivity
+    private val activity: PokemonListActivity
 ) : RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

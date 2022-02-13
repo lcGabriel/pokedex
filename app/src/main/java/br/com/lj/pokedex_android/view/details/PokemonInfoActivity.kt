@@ -1,4 +1,4 @@
-package br.com.lj.pokedex_android.view.activity
+package br.com.lj.pokedex_android.view.details
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -8,9 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lj.pokedex_android.databinding.ActivityDetailsPokemonBinding
+import br.com.lj.pokedex_android.domain.PokemonSpecies
 import br.com.lj.pokedex_android.utils.CommonUtlis
-import br.com.lj.pokedex_android.viewModel.PokemonViewModel
-import br.com.lj.pokedex_android.viewModel.PokemonViewModelFactory
+import br.com.lj.pokedex_android.viewModel.details.PokemonDetailsViewModel
+import br.com.lj.pokedex_android.viewModel.details.PokemonDetailsViewModelFactory
+import br.com.lj.pokedex_android.viewModel.main.PokemonViewModel
+import br.com.lj.pokedex_android.viewModel.main.PokemonViewModelFactory
 import com.bumptech.glide.Glide
 
 class PokemonInfoActivity : AppCompatActivity() {
@@ -20,8 +23,8 @@ class PokemonInfoActivity : AppCompatActivity() {
 
 
     private val viewModel by lazy {
-        ViewModelProvider(this, PokemonViewModelFactory())
-            .get(PokemonViewModel::class.java)
+        ViewModelProvider(this, PokemonDetailsViewModelFactory())
+            .get(PokemonDetailsViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,12 +33,14 @@ class PokemonInfoActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        initValues()
+        viewModel.pokemonsSpecies.observe(this) {
+            initValues(it)
+        }
     }
 
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
-    private fun initValues() {
+    private fun initValues(listSpecies: List<PokemonSpecies?>) {
         val i = intent
         val urlImage = i.getStringExtra("image")
         val namePokemon = i.getStringExtra("name")
@@ -44,7 +49,7 @@ class PokemonInfoActivity : AppCompatActivity() {
         val type2 = i.getStringExtra("type2")
         val listSkills = i.getStringArrayListExtra("ability")
         val height = i.getDoubleExtra("height", 0.0)
-        val weight = i.getDoubleExtra("weight",0.0)
+        val weight = i.getDoubleExtra("weight", 0.0)
         val stats = i.getIntegerArrayListExtra("statsList")
 
 
@@ -61,7 +66,8 @@ class PokemonInfoActivity : AppCompatActivity() {
         binding.customItem.txvSpecialAttackPokemon.text = stats[3].toString().plus(" %")
         binding.customItem.txvSpeedPokemon.text = stats[4].toString().plus(" %")
         binding.customItem.txvSpecialDefencePokemon.text = stats[5].toString().plus(" %")
-        binding.customItem.txvTotalPokemon.text = (stats[0]+stats[1]+stats[2]+stats[3]+stats[4]).toString().plus(" %")
+        binding.customItem.txvTotalPokemon.text =
+            (stats[0] + stats[1] + stats[2] + stats[3] + stats[4]).toString().plus(" %")
 
 
         binding.tvType1.setBackgroundColor(
@@ -85,6 +91,12 @@ class PokemonInfoActivity : AppCompatActivity() {
                 )
             )
         }
-    }
 
+        for (species in listSpecies) {
+            if (species != null) {
+                binding.txvDescriptionPokemon.text = species.flavor_text_entries[7].flavor_text
+                binding.txvCategoryPokemon.text = species.genera[4].genus
+            }
+        }
+    }
 }
