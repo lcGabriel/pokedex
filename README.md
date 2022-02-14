@@ -1,16 +1,17 @@
 # Pokedex 
 
 ### Flow
-- <b>main</b>: Branch com a versão do App mais estável. Um simples commit na main é apenas um release candidate. Já uma tag da main é uma versão de PRD.
-- <b>tag</b>: Foto da versão que foi liberada para PRD. Identificadora da versão e associada a uma release no github
+- <b>main</b>: Branch com a versão do App mais estável
+- <b>tag</b>: Foto da versão que foi liberada. Identificadora da versão
 
-Example of Git Flow
-
-<img src="file:///home/lucas.gabriel@VALEMOBI.CORP/Downloads/WhatsApp%20Image%202022-02-13%20at%2017.14.37.jpeg">
+![WhatsApp Image 2022-02-11 at 12 55 00](https://user-images.githubusercontent.com/64050149/153891848-246483ec-8b4d-4d1b-9e9b-eda52302c570.jpeg)
 
 ## :scroll: Description
 <!--- Describe your changes in detail -->
+Projeto faltou algumas fucionalidades por falta de tempo, por conta da entrega
+mas grande parte do que foi pedido foi entregue e desenvolvido.
 
 ## :crystal_ball: Next steps
+Inserir as funcionalidades faltantes e ajustar o layout para uma melhor experiencia do usuario.
 
 
