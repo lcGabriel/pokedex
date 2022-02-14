@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lj.pokedex_android.databinding.ActivityDetailsPokemonBinding
 import br.com.lj.pokedex_android.utils.CommonUtlis
 import br.com.lj.pokedex_android.utils.CommonUtlis.Companion.formatterHeight
