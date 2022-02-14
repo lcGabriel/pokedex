@@ -83,5 +83,8 @@ class PokemonInfoActivity : AppCompatActivity() {
         binding.txvGenderPokemon.text = CommonUtlis.defineGender(gender)
         binding.txvDescriptionPokemon.text = flavorSpecies
         binding.txvCategoryPokemon.text = genusSpecies
+        binding.imageSkills.setOnClickListener {
+
+        }
     }
 }
