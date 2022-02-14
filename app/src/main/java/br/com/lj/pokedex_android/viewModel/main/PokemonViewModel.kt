@@ -7,12 +7,45 @@ import br.com.lj.pokedex_android.domain.*
 
 class PokemonViewModel : ViewModel() {
     var pokemons = MutableLiveData<List<Pokemon?>>()
+    var pokemonsSpecies = MutableLiveData<List<PokemonSpecies?>>()
     var listNamePokemon = ArrayList<String>()
 
     init {
         Thread {
             loadPokemons()
+            loadPokemonsSpecies()
         }.start()
+    }
+
+    private fun loadPokemonsSpecies() {
+        val pokemonsApiResult = PokemonRepository.listPokemonsSpecies()
+
+        pokemonsApiResult?.results?.let {
+
+            pokemonsSpecies.postValue(it.map { pokemonResult ->
+                val number = pokemonResult.url
+                    .replace("https://pokeapi.co/api/v2/pokemon-species/", "")
+                    .replace("/", "").toInt()
+
+                val pokemonApiResult = PokemonRepository.getPokemonSpecies(number)
+
+                pokemonApiResult?.let {
+                    PokemonSpecies(
+                        pokemonApiResult.gender_rate,
+                        pokemonApiResult.genera.map { genera ->
+                            Genus(
+                                genera.genus
+                            )
+                        },
+                        pokemonApiResult.flavor_text_entries.map { flavor ->
+                            FlavorTextEntries(
+                                flavor.flavor_text
+                            )
+                        },
+                    )
+                }
+            })
+        }
     }
 
     private fun loadPokemons() {

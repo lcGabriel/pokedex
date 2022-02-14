@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.lj.pokedex_android.databinding.ActivityMainBinding
 import br.com.lj.pokedex_android.domain.Pokemon
+import br.com.lj.pokedex_android.domain.PokemonSpecies
 import br.com.lj.pokedex_android.view.main.adapter.PokemonAdapter
 import br.com.lj.pokedex_android.viewModel.main.PokemonViewModel
 import br.com.lj.pokedex_android.viewModel.main.PokemonViewModelFactory
@@ -24,6 +25,7 @@ class PokemonListActivity : AppCompatActivity() {
     private var isScrolling = false
     private var isReload = false
     private var listPokemonInsert = ArrayList<Pokemon>()
+    private var listPokemonSpeciesInsert = ArrayList<PokemonSpecies>()
     private var listPokemon: ArrayList<Pokemon?>? = arrayListOf()
     private var listPokemonName: ArrayList<String>? = arrayListOf()
     private var currentPage: Int = 0
@@ -49,10 +51,12 @@ class PokemonListActivity : AppCompatActivity() {
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-        viewModel.pokemons.observe(this) {
-            searchPokemons(it)
-            makeListPokemon(it)
-            addListPokemonFull(it)
+        viewModel.pokemons.observe(this) { pokemon ->
+            viewModel.pokemonsSpecies.observe(this){ pokemonSpecies ->
+                searchPokemons(pokemon, pokemonSpecies)
+                makeListPokemon(pokemon, pokemonSpecies)
+                addListPokemonFull(pokemon, pokemonSpecies)
+            }
         }
 
         buildRecyclerView()
@@ -71,7 +75,7 @@ class PokemonListActivity : AppCompatActivity() {
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (isScrolling && (total == lastVisibleItemPosition + 1)) {
                                 isScrolling = false
-                                makeListPokemon(listPokemonInsert)
+                                makeListPokemon(listPokemonInsert, listPokemonSpeciesInsert)
                             }
                         }, 8000L)
                     }
@@ -88,7 +92,7 @@ class PokemonListActivity : AppCompatActivity() {
         })
     }
 
-    private fun searchPokemons(pokemons: List<Pokemon?>) {
+    private fun searchPokemons(pokemons: List<Pokemon?>, pokemonsSpecies: List<PokemonSpecies?>) {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 isFilter = false
@@ -104,20 +108,20 @@ class PokemonListActivity : AppCompatActivity() {
                     }
 
                 isFilter = true
-                recyclerView.adapter = PokemonAdapter(filteredContacts, activity!!)
+                recyclerView.adapter = PokemonAdapter(filteredContacts, activity!!, pokemonsSpecies)
 
                 return false
             }
         })
     }
 
-    private fun makeListPokemon(pokemons: List<Pokemon?>) {
+    private fun makeListPokemon(pokemons: List<Pokemon?>, pokemonSpecies: List<PokemonSpecies?>) {
         for (poke in pokemons) {
             if (isReload) {
                 if (viewModel.checkPokemonName(listPokemonName!!.toList(), poke!!)) {
                     when (currentPage) {
                         limit -> {
-                            loadRecyclerView(viewModel.reloadList(limit ,viewModel.listNamePokemon))
+                            loadRecyclerView(viewModel.reloadList(limit ,viewModel.listNamePokemon), pokemonSpecies)
                             break
                         }
                         else -> {
@@ -130,7 +134,7 @@ class PokemonListActivity : AppCompatActivity() {
             } else {
                 when (currentPage) {
                     limit -> {
-                        loadRecyclerView(listPokemon!!)
+                        loadRecyclerView(listPokemon!!, pokemonSpecies)
                         binding.progressBar.visibility = View.GONE
                         isReload = true
                         break
@@ -146,16 +150,22 @@ class PokemonListActivity : AppCompatActivity() {
         }
     }
 
-    private fun addListPokemonFull(pokemons: List<Pokemon?>) {
+    private fun addListPokemonFull(pokemons: List<Pokemon?>, pokemonsSpecies: List<PokemonSpecies?>) {
         for (poke in pokemons) {
             if (poke != null) {
                 listPokemonInsert.add(poke)
             }
         }
+
+        for (species in pokemonsSpecies){
+            if (species != null) {
+                listPokemonSpeciesInsert.add(species)
+            }
+        }
     }
 
-    private fun loadRecyclerView(pokemons: List<Pokemon?>) {
-        recyclerView.adapter = PokemonAdapter(pokemons, this)
+    private fun loadRecyclerView(pokemons: List<Pokemon?>, pokemonsSpecies: List<PokemonSpecies?>) {
+        recyclerView.adapter = PokemonAdapter(pokemons, this, pokemonsSpecies)
         activity = this
         currentPage - 10
     }
