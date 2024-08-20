@@ -7,6 +7,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import br.com.lj.pokedex_android.databinding.ActivityDetailsPokemonBinding
 import br.com.lj.pokedex_android.utils.CommonUtlis
+import br.com.lj.pokedex_android.utils.CommonUtlis.Companion.formatterHeight
+import br.com.lj.pokedex_android.utils.CommonUtlis.Companion.formatterKg
 import com.bumptech.glide.Glide
 
 class PokemonInfoActivity : AppCompatActivity() {
@@ -43,8 +45,8 @@ class PokemonInfoActivity : AppCompatActivity() {
         binding.tvName.text = namePokemon
         binding.tvNumber.text = numberPokemon
         binding.tvType1.text = type1
-        binding.txvHeightPokemon.text = height.toString().plus(" m")
-        binding.txvWeigthPokemon.text = CommonUtlis.formatterKg(weight).plus(" Kg")
+        binding.txvHeightPokemon.text = formatterHeight(height!!).toString().plus(" m")
+        binding.txvWeigthPokemon.text = formatterKg(weight).toString().plus(" Kg")
         binding.txvSkillsPokemon.text = listSkills!![0].capitalize()
         binding.customItem.txvHpPokemon.text = stats!![0].toString().plus(" %")
         binding.customItem.txvAttackPokemon.text = stats[1].toString().plus(" %")
@@ -81,5 +83,8 @@ class PokemonInfoActivity : AppCompatActivity() {
         binding.txvGenderPokemon.text = CommonUtlis.defineGender(gender)
         binding.txvDescriptionPokemon.text = flavorSpecies
         binding.txvCategoryPokemon.text = genusSpecies
+        binding.imageSkills.setOnClickListener {
+
+        }
     }
 }

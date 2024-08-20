@@ -1,17 +1,20 @@
 package br.com.lj.pokedex_android.utils
 
+
 class CommonUtlis {
     /**
      * Utility class to perform commons methods and logics in the App.
      */
     companion object {
 
-        private val REGEX_KGL = "\\d{2,3}\\.\\d{0,3}".toRegex()
-
-
-        fun formatterKg(peso: String?): String {
-            return peso!!.replace(REGEX_KGL, peso)
+        fun formatterKg(peso: String?): Float {
+            return (peso).toString().toFloat() / 10
         }
+
+        fun formatterHeight(height: String?): Float {
+            return (height).toString().toFloat() / 10
+        }
+
 
         fun changeColorTypePoKemon(typePokemon: String): String {
             when (typePokemon) {
