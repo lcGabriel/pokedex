@@ -13,7 +13,7 @@ import br.com.lj.pokedex_android.R
 import br.com.lj.pokedex_android.domain.Pokemon
 import br.com.lj.pokedex_android.domain.PokemonSpecies
 import br.com.lj.pokedex_android.utils.CommonUtlis
-import br.com.lj.pokedex_android.view.details.PokemonInfoActivity
+import br.com.lj.pokedex_android.view.info.PokemonInfoActivity
 import br.com.lj.pokedex_android.view.main.PokemonListActivity
 import com.bumptech.glide.Glide
 

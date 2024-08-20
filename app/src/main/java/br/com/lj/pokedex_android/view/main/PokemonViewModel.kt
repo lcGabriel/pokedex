@@ -1,4 +1,4 @@
-package br.com.lj.pokedex_android.viewModel.main
+package br.com.lj.pokedex_android.view.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

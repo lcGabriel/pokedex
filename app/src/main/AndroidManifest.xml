@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.details.PokemonInfoActivity"
+        <activity android:name=".view.info.PokemonInfoActivity"
             android:exported="true"/>
     </application>
 

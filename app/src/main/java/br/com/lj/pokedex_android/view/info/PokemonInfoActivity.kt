@@ -1,11 +1,10 @@
-package br.com.lj.pokedex_android.view.details
+package br.com.lj.pokedex_android.view.info
 
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lj.pokedex_android.databinding.ActivityDetailsPokemonBinding
 import br.com.lj.pokedex_android.utils.CommonUtlis
 import com.bumptech.glide.Glide

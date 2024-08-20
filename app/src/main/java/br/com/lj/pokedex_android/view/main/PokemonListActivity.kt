@@ -14,8 +14,7 @@ import br.com.lj.pokedex_android.databinding.ActivityMainBinding
 import br.com.lj.pokedex_android.domain.Pokemon
 import br.com.lj.pokedex_android.domain.PokemonSpecies
 import br.com.lj.pokedex_android.view.main.adapter.PokemonAdapter
-import br.com.lj.pokedex_android.viewModel.main.PokemonViewModel
-import br.com.lj.pokedex_android.viewModel.main.PokemonViewModelFactory
+import br.com.lj.pokedex_android.view.main.factory.PokemonViewModelFactory
 import java.util.*
 
 class PokemonListActivity : AppCompatActivity() {
@@ -145,7 +144,6 @@ class PokemonListActivity : AppCompatActivity() {
                         currentPage++
                     }
                 }
-
             }
         }
     }
